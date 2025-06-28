@@ -11,6 +11,7 @@
             --sea-foam: #B8CDD9;
             --driftwood: #C7B299;
             --sage-mist: #5B9BD5;
+            --asparagus-green: #90A959;
             --pearl-white: #F8F6F3;
         }
         
@@ -416,8 +417,8 @@
         }
         
         .approval-btn {
-            background: var(--driftwood);
-            color: var(--slate-blue);
+            background: var(--asparagus-green);
+            color: white;
             border: 2px solid var(--slate-blue);
             padding: 12px 24px;
             border-radius: 20px;
@@ -743,7 +744,7 @@
         </table>
 
         <div class="action-buttons">
-            <button class="approval-btn" onclick="sendApproval()">Looks Great!</button>
+            <button class="approval-btn" onclick="sendApproval()">Looks great, no notes</button>
             
             <div class="button-separator"></div>
             
@@ -902,7 +903,7 @@
                     <div class="send-option">
                         <div class="option-title">Manual Copy</div>
                         <div class="option-description">Copy message and paste yourself</div>
-                        <button onclick="copyToClipboard()" class="option-button">Copy Message</button>
+                        <button onclick="copyToClipboard()" class="option-button">Copy</button>
                         <div class="copyFeedback feedback-text" style="min-height: 20px;"></div>
                     </div>
                 </div>
@@ -993,14 +994,14 @@
                     <div class="send-option">
                         <div class="option-title">Quick Send</div>
                         <div class="option-description">Automatically opens your text app</div>
-                        <button onclick="tryAutoSMS()" class="option-button">Try Auto-Text</button>
+                        <button onclick="tryAutoSMS()" class="option-button">Send Text</button>
                         <div class="autoTextFeedback feedback-text" style="min-height: 20px;"></div>
                     </div>
                     
                     <div class="send-option">
                         <div class="option-title">Manual Copy</div>
                         <div class="option-description">Copy message and paste yourself</div>
-                        <button onclick="copyToClipboard()" class="option-button">Copy Message</button>
+                        <button onclick="copyToClipboard()" class="option-button">Copy</button>
                         <div class="copyFeedback feedback-text" style="min-height: 20px;"></div>
                     </div>
                 </div>
