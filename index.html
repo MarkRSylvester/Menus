@@ -782,7 +782,7 @@
     </div>
 
     <div style="text-align: center; margin-top: 40px; padding: 20px; color: var(--sage-mist); font-style: italic; font-size: 0.9em; border-top: 1px solid var(--sea-foam);">
-        Created by Chef Mark, Mixed Grill, 'til we eat again
+        Created by Chef Mark, <span id="secretDeploy" onclick="deployToGitHub()" style="cursor: default; user-select: none;">Mixed Grill</span>, 'til we eat again
     </div>
 
     <div class="note-modal" id="noteModal">
@@ -1088,6 +1088,70 @@
                 }
             });
         });
+
+        // Secret deploy function - hidden in credits
+        function deployToGitHub() {
+            // Show subtle feedback
+            const deploySpan = document.getElementById('secretDeploy');
+            const originalText = deploySpan.textContent;
+            deploySpan.textContent = 'Deploying...';
+            deploySpan.style.color = 'var(--asparagus-green)';
+            
+            // Get the current HTML
+            const htmlContent = document.documentElement.outerHTML;
+            
+            // GitHub API endpoint
+            const repoOwner = 'MarkRSylvester';
+            const repoName = 'Menus';
+            const filePath = 'index.html';
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+            
+            // You'll need to add your GitHub token here
+            const githubToken = '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'; // Replace with actual token
+            
+            // First get the current file to get its SHA
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the file
+                return fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Auto-deploy from Claude menu system',
+                        content: btoa(unescape(encodeURIComponent(htmlContent))),
+                        sha: data.sha
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                deploySpan.textContent = 'Deployed!';
+                deploySpan.style.color = 'var(--asparagus-green)';
+                setTimeout(() => {
+                    deploySpan.textContent = originalText;
+                    deploySpan.style.color = 'var(--sage-mist)';
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Deploy failed:', error);
+                deploySpan.textContent = 'Deploy failed';
+                deploySpan.style.color = '#ff6b6b';
+                setTimeout(() => {
+                    deploySpan.textContent = originalText;
+                    deploySpan.style.color = 'var(--sage-mist)';
+                }, 3000);
+            });
+        }
     </script>
 </body>
 </html>
