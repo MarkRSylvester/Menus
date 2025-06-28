@@ -595,34 +595,14 @@
                 font-size: 1em;
             }
             
+            /* Hide the table on mobile and create a better layout */
             table {
-                font-size: 0.9em;
+                display: none;
             }
             
-            th {
-                padding: 15px 10px;
-                font-size: 1em;
-            }
-            
-            td {
-                padding: 15px 12px;
-            }
-            
-            /* Stack delivery days vertically on mobile */
-            table tr:not(.week-header) {
+            /* Create mobile-specific layout */
+            .mobile-menu {
                 display: block;
-                border: none;
-                margin-bottom: 20px;
-            }
-            
-            table tr:not(.week-header) td {
-                display: block;
-                width: 100%;
-                border: 2px solid var(--sea-foam);
-                border-radius: 15px;
-                margin-bottom: 15px;
-                background: white;
-                box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);
             }
             
             .action-buttons {
@@ -662,6 +642,11 @@
                 font-size: 0.9em;
             }
         }
+        
+        /* Hidden mobile menu - only shows on mobile */
+        .mobile-menu {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -677,7 +662,172 @@
             <strong>How it works:</strong> Click on any menu item to add a note about it, or add general delivery notes at the bottom of each section!
         </div>
 
+        <!-- Mobile-friendly menu layout -->
+        <div class="mobile-menu">
+            <div style="background: var(--sage-mist); color: white; font-weight: bold; text-align: center; padding: 18px; font-size: 1.1em; border-radius: 15px; margin: 20px 0;">
+                <strong>Week 1: June 30 - July 6, 2025</strong>
+            </div>
+            
+            <div style="background: white; border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px solid var(--sea-foam); box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);">
+                <div class="delivery-date"><strong>Monday, June 30</strong></div>
+                <div style="color: var(--sage-mist); font-style: italic; text-align: center; padding: 40px 20px;">
+                    See previous menu
+                </div>
+            </div>
+            
+            <div style="background: white; border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px solid var(--sea-foam); box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);">
+                <div class="delivery-date"><strong>Thursday, July 3</strong></div>
+                <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                    <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                </div>
+                <div class="menu-item" data-item="Chicken Soup" onclick="openNoteModal(this)">
+                    <strong>Chicken Soup</strong>
+                </div>
+                <div class="menu-item" data-item="Buffalo Cauliflower" onclick="openNoteModal(this)">
+                    <strong>Buffalo Cauliflower</strong>
+                </div>
+                <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                    <strong>Crudité with Hummus</strong>
+                </div>
+                <div class="menu-item" data-item="Sweet Potato Hash" onclick="openNoteModal(this)">
+                    <strong>Sweet Potato Hash</strong>
+                </div>
+                <div class="note-section">
+                    <textarea class="note-input" placeholder="Add general notes for Thursday, July 3 delivery..." data-item="Thursday, July 3 delivery"></textarea>
+                </div>
+            </div>
+            
+            <div style="background: var(--sage-mist); color: white; font-weight: bold; text-align: center; padding: 18px; font-size: 1.1em; border-radius: 15px; margin: 20px 0;">
+                <strong>Week 2: July 7-13, 2025</strong>
+            </div>
+            
+            <div style="background: white; border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px solid var(--sea-foam); box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);">
+                <div class="delivery-date"><strong>Monday, July 7</strong></div>
+                <div class="menu-item" data-item="Grilled Salmon with Dill" onclick="openNoteModal(this)">
+                    <strong>Grilled Salmon with Dill</strong> (3 pieces)
+                </div>
+                <div class="menu-item" data-item="BBQ Chicken" onclick="openNoteModal(this)">
+                    <strong>BBQ Chicken</strong>
+                </div>
+                <div class="menu-item" data-item="Chicken Detox Soup" onclick="openNoteModal(this)">
+                    <strong>Chicken Detox Soup</strong>
+                </div>
+                <div class="menu-item" data-item="Cauliflower with Spicy Aioli" onclick="openNoteModal(this)">
+                    <strong>Cauliflower with Spicy Aioli</strong>
+                </div>
+                <div class="menu-item" data-item="Asparagus with Lemon" onclick="openNoteModal(this)">
+                    <strong>Asparagus with Lemon</strong>
+                </div>
+                <div class="note-section">
+                    <textarea class="note-input" placeholder="Add general notes for Monday, July 7 delivery..." data-item="Monday, July 7 delivery"></textarea>
+                </div>
+            </div>
+            
+            <div style="background: white; border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px solid var(--sea-foam); box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);">
+                <div class="delivery-date"><strong>Thursday, July 10</strong></div>
+                <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                    <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                </div>
+                <div class="menu-item" data-item="Kung Pao Chicken" onclick="openNoteModal(this)">
+                    <strong>Kung Pao Chicken</strong>
+                </div>
+                <div class="menu-item" data-item="Carrot Ginger Soup" onclick="openNoteModal(this)">
+                    <strong>Carrot Ginger Soup</strong>
+                </div>
+                <div class="menu-item" data-item="Cauliflower Pizza Balls" onclick="openNoteModal(this)">
+                    <strong>Cauliflower Pizza Balls</strong>
+                </div>
+                <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                    <strong>Crudité with Hummus</strong>
+                </div>
+                <div class="note-section">
+                    <textarea class="note-input" placeholder="Add general notes for Thursday, July 10 delivery..." data-item="Thursday, July 10 delivery"></textarea>
+                </div>
+            </div>
+        </div>
+
         <table>
+            <tr>
+                <td class="week-header" colspan="2"><strong>Week 1: June 30 - July 6, 2025</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="delivery-date"><strong>Monday, June 30</strong></div>
+                    <div style="color: var(--sage-mist); font-style: italic; text-align: center; padding: 40px 20px;">
+                        See previous menu
+                    </div>
+                </td>
+                <td>
+                    <div class="delivery-date"><strong>Thursday, July 3</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                    </div>
+                    <div class="menu-item" data-item="Chicken Soup" onclick="openNoteModal(this)">
+                        <strong>Chicken Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Buffalo Cauliflower" onclick="openNoteModal(this)">
+                        <strong>Buffalo Cauliflower</strong>
+                    </div>
+                    <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                        <strong>Crudité with Hummus</strong>
+                    </div>
+                    <div class="menu-item" data-item="Sweet Potato Hash" onclick="openNoteModal(this)">
+                        <strong>Sweet Potato Hash</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Thursday, July 3 delivery..." data-item="Thursday, July 3 delivery"></textarea>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="week-header" colspan="2"><strong>Week 2: July 7-13, 2025</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="delivery-date"><strong>Monday, July 7</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Dill" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Dill</strong> (3 pieces)
+                    </div>
+                    <div class="menu-item" data-item="BBQ Chicken" onclick="openNoteModal(this)">
+                        <strong>BBQ Chicken</strong>
+                    </div>
+                    <div class="menu-item" data-item="Chicken Detox Soup" onclick="openNoteModal(this)">
+                        <strong>Chicken Detox Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Cauliflower with Spicy Aioli" onclick="openNoteModal(this)">
+                        <strong>Cauliflower with Spicy Aioli</strong>
+                    </div>
+                    <div class="menu-item" data-item="Asparagus with Lemon" onclick="openNoteModal(this)">
+                        <strong>Asparagus with Lemon</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Monday, July 7 delivery..." data-item="Monday, July 7 delivery"></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div class="delivery-date"><strong>Thursday, July 10</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                    </div>
+                    <div class="menu-item" data-item="Kung Pao Chicken" onclick="openNoteModal(this)">
+                        <strong>Kung Pao Chicken</strong>
+                    </div>
+                    <div class="menu-item" data-item="Carrot Ginger Soup" onclick="openNoteModal(this)">
+                        <strong>Carrot Ginger Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Cauliflower Pizza Balls" onclick="openNoteModal(this)">
+                        <strong>Cauliflower Pizza Balls</strong>
+                    </div>
+                    <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                        <strong>Crudité with Hummus</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Thursday, July 10 delivery..." data-item="Thursday, July 10 delivery"></textarea>
+                    </div>
+                </td>
+            </tr>
+        </table>
             <tr>
                 <td class="week-header" colspan="2"><strong>Week 1: June 30 - July 6, 2025</strong></td>
             </tr>
