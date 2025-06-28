@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lynda's Two-Week Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --slate-blue: #4A5D6B;
+            --sea-foam: #B8CDD9;
+            --driftwood: #C7B299;
+            --sage-mist: #5B9BD5;
+            --pearl-white: #F8F6F3;
+        }
+        
+        .link-output {
+            margin-top: 25px;
+            padding: 0;
+            background: none;
+            border: none;
+            display: none;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--pearl-white);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(184, 205, 217, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(143, 166, 142, 0.1) 0%, transparent 50%);
+        }
+        
+        .menu-container {
+            background: var(--pearl-white);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 32px rgba(74, 93, 107, 0.3);
+            margin: 20px 0;
+            border: 2px solid var(--slate-blue);
+        }
+        
+        h1 {
+            color: var(--slate-blue);
+            text-align: center;
+            font-size: 2.4em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--sage-mist);
+            font-style: italic;
+            margin-bottom: 35px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.2);
+            border: 2px solid var(--slate-blue);
+        }
+        
+        th {
+            background: var(--slate-blue);
+            color: var(--pearl-white);
+            padding: 22px 18px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.15em;
+        }
+        
+        td {
+            padding: 28px 22px;
+            vertical-align: top;
+            border-bottom: 1px solid var(--sea-foam);
+            background: white;
+        }
+        
+        .week-header {
+            background: var(--sage-mist);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 18px;
+            font-size: 1.1em;
+        }
+        
+        .delivery-date {
+            font-weight: bold;
+            color: var(--slate-blue);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 3px solid var(--driftwood);
+            padding-bottom: 8px;
+        }
+        
+        .menu-item {
+            margin: 10px 0;
+            padding: 12px 16px;
+            background: rgba(184, 205, 217, 0.08);
+            border-radius: 8px;
+            border: 2px solid var(--sea-foam);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(74, 93, 107, 0.1);
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        
+        .menu-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.2);
+            background: var(--sea-foam);
+            border-color: var(--sage-mist);
+            color: var(--slate-blue);
+        }
+        
+        .menu-item:hover::after {
+            content: "+ Add Note";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--sage-mist);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        .menu-item.has-note {
+            background: var(--driftwood);
+            border-color: var(--slate-blue);
+            border-width: 3px;
+            transform: translateX(5px);
+            color: white;
+        }
+        
+        .menu-item.has-note::after {
+            content: "✓ Has Note";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--slate-blue);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        .menu-item.has-note:hover::after {
+            content: "✓ Has Note";
+        }
+        
+        .floating-feedback {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--sage-mist);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.3);
+            z-index: 2000;
+            transition: transform 0.4s ease;
+            font-weight: bold;
+            border: 2px solid var(--slate-blue);
+            font-size: 1.1em;
+        }
+        
+        .floating-feedback.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .note-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 93, 107, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .note-modal.show {
+            display: flex;
+        }
+        
+        .note-modal-content {
+            background: var(--pearl-white);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(74, 93, 107, 0.4);
+            border: 3px solid var(--slate-blue);
+        }
+        
+        .note-modal-title {
+            color: var(--slate-blue);
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .note-modal-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid var(--sea-foam);
+            font-weight: bold;
+            color: var(--slate-blue);
+        }
+        
+        .note-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid var(--sea-foam);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background: white;
+            box-sizing: border-box;
+        }
+        
+        .note-textarea:focus {
+            outline: none;
+            border-color: var(--sage-mist);
+            box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.3);
+        }
+        
+        .note-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 20px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn.save {
+            background: var(--sage-mist);
+            color: white;
+            border: 2px solid var(--slate-blue);
+        }
+        
+        .modal-btn.cancel {
+            background: white;
+            color: var(--slate-blue);
+            border: 2px solid var(--sea-foam);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .note-section {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 2px dashed var(--sea-foam);
+        }
+        
+        .note-input {
+            width: 100%;
+            min-height: 45px;
+            padding: 10px 12px;
+            border: 2px solid var(--sea-foam);
+            border-radius: 8px;
+            background: white;
+            font-size: 0.95em;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+        
+        .note-input:focus {
+            outline: none;
+            border-color: var(--sage-mist);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.3);
+        }
+        
+        .note-input::placeholder {
+            color: var(--sage-mist);
+            font-style: italic;
+            opacity: 0.7;
+        }
+        
+        .live-preview {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border: 2px solid var(--slate-blue);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: inherit;
+            font-size: 0.85em;
+            line-height: 1.4;
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.2);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .preview-title {
+            font-weight: bold;
+            color: var(--slate-blue);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .preview-content {
+            white-space: pre-line;
+            color: var(--slate-blue);
+        }
+        
+        .preview-empty {
+            color: var(--sage-mist);
+            opacity: 0.7;
+            font-style: italic;
+        }
+        
+        .progress-indicator {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid var(--sea-foam);
+            font-size: 0.9em;
+            color: var(--slate-blue);
+        }
+        
+        .quick-actions {
+            background: var(--pearl-white);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--sage-mist);
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .button-separator {
+            width: 2px;
+            height: 40px;
+            background: var(--sea-foam);
+            margin: 0 10px;
+        }
+        
+        .action-btn {
+            background: var(--sage-mist);
+            color: white;
+            border: 2px solid var(--slate-blue);
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(74, 93, 107, 0.2);
+            font-size: 0.95em;
+        }
+        
+        .action-btn:hover {
+            background: var(--slate-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 93, 107, 0.3);
+        }
+        
+        .approval-btn {
+            background: var(--driftwood);
+            color: var(--slate-blue);
+            border: 2px solid var(--slate-blue);
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(74, 93, 107, 0.2);
+            font-size: 0.95em;
+        }
+        
+        .approval-btn:hover {
+            background: var(--slate-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 93, 107, 0.3);
+        }
+        
+        .approval-btn::before {
+            content: "✓ ";
+            font-weight: bold;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 0;
+            background: none;
+            border: none;
+        }
+        
+        .feedback-text {
+            margin: 8px 0;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            text-align: center;
+            transition: all 0.3s ease;
+            line-height: 1.2;
+        }
+        
+        .feedback-success {
+            background: rgba(184, 205, 217, 0.4);
+            color: var(--slate-blue);
+            border: 1px solid var(--sea-foam);
+        }
+        
+        .feedback-info {
+            background: rgba(143, 166, 142, 0.4);
+            color: var(--slate-blue);
+            border: 1px solid var(--sage-mist);
+        }
+        
+        .send-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px auto;
+            max-width: 600px;
+        }
+        
+        .send-option {
+            background: white;
+            border: 2px solid var(--sea-foam);
+            border-radius: 15px;
+            padding: 18px 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .send-option:hover {
+            border-color: var(--sage-mist);
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .option-title {
+            font-weight: bold;
+            color: var(--slate-blue);
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+        
+        .option-description {
+            color: var(--sage-mist);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .option-button {
+            background: var(--sage-mist);
+            color: white;
+            border: 2px solid var(--slate-blue);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            max-width: 140px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(74, 93, 107, 0.2);
+            font-size: 0.9em;
+        }
+        
+        .option-button:hover {
+            background: var(--slate-blue);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 93, 107, 0.3);
+        }
+        
+        .message-preview {
+            background: white;
+            border: 2px solid var(--slate-blue);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            font-family: inherit;
+            font-size: 0.9em;
+            line-height: 1.5;
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);
+        }
+        
+        .contact-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: var(--sage-mist);
+        }
+        
+        .requirements {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            border: 2px solid var(--sea-foam);
+            color: var(--slate-blue);
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);
+        }
+        
+        .requirement-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--slate-blue);
+            font-size: 1.1em;
+        }
+        
+        .checkmark {
+            color: var(--sage-mist);
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .menu-container {
+                padding: 20px;
+                margin: 10px 0;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th {
+                padding: 15px 10px;
+                font-size: 1em;
+            }
+            
+            td {
+                padding: 15px 12px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 12px;
+                align-items: stretch;
+            }
+            
+            .action-btn, .approval-btn {
+                width: 100%;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+            
+            .button-separator {
+                width: 80%;
+                height: 2px;
+                margin: 8px auto;
+                order: 1;
+            }
+            
+            .approval-btn {
+                order: 0;
+            }
+            
+            .live-preview {
+                font-size: 0.8em;
+                max-height: 200px;
+            }
+            
+            .send-options {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .requirements {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Lynda's Two-Week Menu</h1>
+        <div class="subtitle">June 30 - July 13, 2025 • Low-Glycemic • Low-Sodium • Modified Keto</div>
+
+        <div class="floating-feedback" id="floatingFeedback">
+            Note added!
+        </div>
+
+        <div class="progress-indicator" id="progressIndicator">
+            <strong>How it works:</strong> Click on any menu item to add a note about it, or add general delivery notes at the bottom of each section!
+        </div>
+
+        <table>
+            <tr>
+                <td class="week-header" colspan="2"><strong>Week 1: June 30 - July 6, 2025</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="delivery-date"><strong>Monday, June 30</strong></div>
+                    <div style="color: var(--sage-mist); font-style: italic; text-align: center; padding: 40px 20px;">
+                        See previous menu
+                    </div>
+                </td>
+                <td>
+                    <div class="delivery-date"><strong>Thursday, July 3</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                    </div>
+                    <div class="menu-item" data-item="Chicken Soup" onclick="openNoteModal(this)">
+                        <strong>Chicken Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Buffalo Cauliflower" onclick="openNoteModal(this)">
+                        <strong>Buffalo Cauliflower</strong>
+                    </div>
+                    <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                        <strong>Crudité with Hummus</strong>
+                    </div>
+                    <div class="menu-item" data-item="Sweet Potato Hash" onclick="openNoteModal(this)">
+                        <strong>Sweet Potato Hash</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Thursday, July 3 delivery..." data-item="Thursday, July 3 delivery"></textarea>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="week-header" colspan="2"><strong>Week 2: July 7-13, 2025</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="delivery-date"><strong>Monday, July 7</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Dill" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Dill</strong> (3 pieces)
+                    </div>
+                    <div class="menu-item" data-item="BBQ Chicken" onclick="openNoteModal(this)">
+                        <strong>BBQ Chicken</strong>
+                    </div>
+                    <div class="menu-item" data-item="Chicken Detox Soup" onclick="openNoteModal(this)">
+                        <strong>Chicken Detox Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Cauliflower with Spicy Aioli" onclick="openNoteModal(this)">
+                        <strong>Cauliflower with Spicy Aioli</strong>
+                    </div>
+                    <div class="menu-item" data-item="Asparagus with Lemon" onclick="openNoteModal(this)">
+                        <strong>Asparagus with Lemon</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Monday, July 7 delivery..." data-item="Monday, July 7 delivery"></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div class="delivery-date"><strong>Thursday, July 10</strong></div>
+                    <div class="menu-item" data-item="Grilled Salmon with Herbs" onclick="openNoteModal(this)">
+                        <strong>Grilled Salmon with Herbs</strong> (4 pieces)
+                    </div>
+                    <div class="menu-item" data-item="Kung Pao Chicken" onclick="openNoteModal(this)">
+                        <strong>Kung Pao Chicken</strong>
+                    </div>
+                    <div class="menu-item" data-item="Carrot Ginger Soup" onclick="openNoteModal(this)">
+                        <strong>Carrot Ginger Soup</strong>
+                    </div>
+                    <div class="menu-item" data-item="Cauliflower Pizza Balls" onclick="openNoteModal(this)">
+                        <strong>Cauliflower Pizza Balls</strong>
+                    </div>
+                    <div class="menu-item" data-item="Crudité with Hummus" onclick="openNoteModal(this)">
+                        <strong>Crudité with Hummus</strong>
+                    </div>
+                    <div class="note-section">
+                        <textarea class="note-input" placeholder="Add general notes for Thursday, July 10 delivery..." data-item="Thursday, July 10 delivery"></textarea>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="action-buttons">
+            <button class="approval-btn" onclick="sendApproval()">Looks Great!</button>
+            
+            <div class="button-separator"></div>
+            
+            <button class="action-btn" onclick="clearAllNotes()">Clear</button>
+            <button class="action-btn" onclick="generateNotesLink()">Send Notes</button>
+            <button class="action-btn" onclick="openGeneralNoteModal()">Add General Note</button>
+        </div>
+
+        <div class="submit-section">
+            <div class="link-output" id="linkOutput"></div>
+        </div>
+
+        <div class="live-preview" id="livePreview">
+            <div class="preview-title">Message Preview:</div>
+            <div class="preview-content preview-empty" id="previewContent">Add notes to see your message...</div>
+        </div>
+
+        <div class="requirements">
+            <div class="requirement-title">Menu Planning Guidelines & Preferences:</div>
+            <div><span class="checkmark">✓</span> Monday deliveries cover 3 days, Thursday deliveries cover 4 days</div>
+            <div><span class="checkmark">✓</span> Thursday salmon: Grilled with Herbs (4 pieces each delivery)</div>
+            <div><span class="checkmark">✓</span> Monday salmon: Grilled with Dill (3 pieces each delivery)</div>
+            <div><span class="checkmark">✓</span> Soup rotation: Chicken Soup (Thursdays), varied (Mondays)</div>
+            <div><span class="checkmark">✓</span> Cauliflower varieties: No repeats within same week</div>
+            <div><span class="checkmark">✓</span> Crudité with Hummus: Thursday deliveries only</div>
+            <div><span class="checkmark">✓</span> BBQ limit: 1 BBQ chicken item for the two weeks</div>
+            <div><span class="checkmark">✓</span> Kung Pao: 1x monthly requirement met</div>
+            <div><span class="checkmark">✓</span> Low-glycemic, low-sodium, modified keto requirements met</div>
+            <div><span class="checkmark">✓</span> No curry until further notice</div>
+            <div><span class="checkmark">✓</span> Based on recent menu history to avoid repetition from past deliveries</div>
+            <div class="note-section">
+                <textarea class="note-input" placeholder="Add notes about your preferences or changes to these guidelines..." data-item="Menu planning guidelines and preferences"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding: 20px; color: var(--sage-mist); font-style: italic; font-size: 0.9em; border-top: 1px solid var(--sea-foam);">
+        Created by Chef Mark, Mixed Grill, 'til we eat again
+    </div>
+
+    <div class="note-modal" id="noteModal">
+        <div class="note-modal-content">
+            <div class="note-modal-title">Add Note</div>
+            <div class="note-modal-item" id="modalItemName"></div>
+            <textarea class="note-textarea" id="modalNoteText" placeholder="What would you like to note about this item? (e.g., 'Make it less spicy', 'Love this!', 'Can we try a different preparation?')"></textarea>
+            <div class="note-modal-buttons">
+                <button class="modal-btn save" onclick="saveNote()">Save Note</button>
+                <button class="modal-btn cancel" onclick="closeNoteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let itemNotes = new Map();
+        let currentModalItem = null;
+        
+        function openNoteModal(element) {
+            const itemName = element.dataset.item;
+            currentModalItem = element;
+            document.getElementById('modalItemName').textContent = itemName;
+            document.getElementById('modalNoteText').value = itemNotes.get(itemName) || '';
+            document.getElementById('noteModal').classList.add('show');
+            setTimeout(() => document.getElementById('modalNoteText').focus(), 100);
+        }
+        
+        function closeNoteModal() {
+            document.getElementById('noteModal').classList.remove('show');
+            currentModalItem = null;
+        }
+        
+        function saveNote() {
+            const noteText = document.getElementById('modalNoteText').value.trim();
+            const itemName = currentModalItem.dataset.item;
+            
+            if (itemName === 'General Menu Note') {
+                if (noteText) {
+                    itemNotes.set('General Menu Note', noteText);
+                    showFloatingFeedback('General note added');
+                } else {
+                    itemNotes.delete('General Menu Note');
+                    showFloatingFeedback('General note removed');
+                }
+            } else {
+                if (noteText) {
+                    itemNotes.set(itemName, noteText);
+                    currentModalItem.classList.add('has-note');
+                    showFloatingFeedback(`Note added for ${itemName}`);
+                } else {
+                    itemNotes.delete(itemName);
+                    currentModalItem.classList.remove('has-note');
+                    showFloatingFeedback(`Note removed for ${itemName}`);
+                }
+            }
+            
+            closeNoteModal();
+            updateProgressIndicator();
+            updatePreview();
+            
+            // Reset placeholder
+            document.getElementById('modalNoteText').placeholder = "What would you like to note about this item? (e.g., 'Make it less spicy', 'Love this!', 'Can we try a different preparation?')";
+        }
+        
+        function showFloatingFeedback(message) {
+            const feedback = document.getElementById('floatingFeedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            setTimeout(() => feedback.classList.remove('show'), 2000);
+        }
+        
+        function clearAllNotes() {
+            itemNotes.clear();
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('has-note'));
+            document.querySelectorAll('.note-input').forEach(input => input.value = '');
+            showFloatingFeedback('All notes cleared!');
+            updateProgressIndicator();
+            updatePreview();
+        }
+        
+        function addGeneralNote() {
+            const firstEmptyInput = document.querySelector('.note-input:not([value])');
+            if (firstEmptyInput) {
+                firstEmptyInput.focus();
+                firstEmptyInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showFloatingFeedback('Scroll to general note areas');
+            } else {
+                showFloatingFeedback('Use the text areas below each delivery');
+            }
+        }
+        
+        function openGeneralNoteModal() {
+            currentModalItem = { dataset: { item: 'General Menu Note' } };
+            document.getElementById('modalItemName').textContent = 'General Menu Note';
+            document.getElementById('modalNoteText').value = '';
+            document.getElementById('modalNoteText').placeholder = 'Add a general note about the entire menu (e.g., "Everything looks great!", "Please make all dishes less spicy", "Love the variety this week!")';
+            document.getElementById('noteModal').classList.add('show');
+            setTimeout(() => document.getElementById('modalNoteText').focus(), 100);
+        }
+        
+        function sendApproval() {
+            const approvalMessage = `Hi Mark!\n\nThe July 3-14 menu looks perfect! No changes needed.\n\nThanks!\nLynda`;
+            window.currentMessage = approvalMessage;
+            
+            const outputHTML = `
+                <div class="feedback-text feedback-success">
+                    <strong>✓ Menu approved and ready to send!</strong>
+                </div>
+                
+                <div class="send-options">
+                    <div class="send-option">
+                        <div class="option-title">Quick Send</div>
+                        <div class="option-description">Automatically opens your text app</div>
+                        <button onclick="tryAutoSMS()" class="option-button">Send Text</button>
+                        <div class="autoTextFeedback feedback-text" style="min-height: 20px;"></div>
+                    </div>
+                    
+                    <div class="send-option">
+                        <div class="option-title">Manual Copy</div>
+                        <div class="option-description">Copy message and paste yourself</div>
+                        <button onclick="copyToClipboard()" class="option-button">Copy Message</button>
+                        <div class="copyFeedback feedback-text" style="min-height: 20px;"></div>
+                    </div>
+                </div>
+                
+                <div class="message-preview">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: var(--slate-blue);">Approval Message:</div>
+                    <div style="white-space: pre-line;">${approvalMessage}</div>
+                </div>
+                
+                <div class="contact-info">
+                    Send to: <strong>(805) 895-3574</strong>
+                </div>
+            `;
+            
+            const outputDiv = document.getElementById('linkOutput');
+            outputDiv.innerHTML = outputHTML;
+            outputDiv.style.display = 'block';
+            
+            const livePreview = document.getElementById('livePreview');
+            if (livePreview) livePreview.style.display = 'none';
+            
+            showFloatingFeedback('Menu approved! Ready to send.');
+            setTimeout(() => outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+        
+        function updateProgressIndicator() {
+            const indicator = document.getElementById('progressIndicator');
+            const noteCount = itemNotes.size;
+            const generalNotes = Array.from(document.querySelectorAll('.note-input')).filter(input => input.value.trim()).length;
+            const totalNotes = noteCount + generalNotes;
+            
+            if (totalNotes === 0) {
+                indicator.innerHTML = '<strong>How it works:</strong> Click on any menu item to add a note about it, or add general delivery notes at the bottom of each section!';
+            } else if (totalNotes < 3) {
+                indicator.innerHTML = `<strong>Great start!</strong> You've added ${totalNotes} note${totalNotes === 1 ? '' : 's'}. Feel free to add more or send when ready.`;
+            } else {
+                indicator.innerHTML = `<strong>Perfect!</strong> You've added ${totalNotes} notes. Your feedback is ready to send!`;
+            }
+        }
+        
+        function updatePreview() {
+            const notes = [];
+            itemNotes.forEach((note, item) => notes.push(`${item}: ${note}`));
+            
+            const noteInputs = document.querySelectorAll('.note-input');
+            noteInputs.forEach(input => {
+                if (input.value.trim()) {
+                    notes.push(`${input.dataset.item}: ${input.value.trim()}`);
+                }
+            });
+            
+            const previewContent = document.getElementById('previewContent');
+            if (notes.length === 0) {
+                previewContent.textContent = 'Add notes to see your message...';
+                previewContent.className = 'preview-content preview-empty';
+            } else {
+                const message = `Hi Mark!\n\nHere's my feedback on the July 3-14 menu:\n\n${notes.join('\n\n')}\n\nThanks so much!\nLynda`;
+                previewContent.textContent = message;
+                previewContent.className = 'preview-content';
+            }
+        }
+
+        function generateNotesLink() {
+            const notes = [];
+            itemNotes.forEach((note, item) => notes.push(`${item}: ${note}`));
+            
+            const noteInputs = document.querySelectorAll('.note-input');
+            noteInputs.forEach(input => {
+                if (input.value.trim()) {
+                    notes.push(`${input.dataset.item}: ${input.value.trim()}`);
+                }
+            });
+            
+            if (notes.length === 0) {
+                alert('Please add at least one note before sending!');
+                return;
+            }
+            
+            const textMessage = `Hi Mark!\n\nHere's my feedback on the July 3-14 menu:\n\n${notes.join('\n\n')}\n\nThanks so much!\nLynda`;
+            window.currentMessage = textMessage;
+            
+            const outputHTML = `
+                <div class="feedback-text feedback-success">
+                    <strong>Your notes are ready to send!</strong>
+                </div>
+                
+                <div class="send-options">
+                    <div class="send-option">
+                        <div class="option-title">Quick Send</div>
+                        <div class="option-description">Automatically opens your text app</div>
+                        <button onclick="tryAutoSMS()" class="option-button">Try Auto-Text</button>
+                        <div class="autoTextFeedback feedback-text" style="min-height: 20px;"></div>
+                    </div>
+                    
+                    <div class="send-option">
+                        <div class="option-title">Manual Copy</div>
+                        <div class="option-description">Copy message and paste yourself</div>
+                        <button onclick="copyToClipboard()" class="option-button">Copy Message</button>
+                        <div class="copyFeedback feedback-text" style="min-height: 20px;"></div>
+                    </div>
+                </div>
+                
+                <div class="message-preview">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: var(--slate-blue);">Message Preview:</div>
+                    <div style="white-space: pre-line;">${textMessage}</div>
+                </div>
+                
+                <div class="contact-info">
+                    Send to: <strong>(805) 895-3574</strong>
+                </div>
+            `;
+            
+            const outputDiv = document.getElementById('linkOutput');
+            outputDiv.innerHTML = outputHTML;
+            outputDiv.style.display = 'block';
+            
+            const livePreview = document.getElementById('livePreview');
+            if (livePreview) livePreview.style.display = 'none';
+            
+            setTimeout(() => outputDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+        
+        function tryAutoSMS() {
+            const encodedMessage = encodeURIComponent(window.currentMessage);
+            const smsLink = `sms:8058953574?body=${encodedMessage}`;
+            const feedbacks = document.querySelectorAll('.autoTextFeedback');
+            
+            feedbacks.forEach(feedback => {
+                feedback.textContent = 'Opening text app...';
+                feedback.className = 'feedback-text feedback-info';
+                
+                try {
+                    window.location.href = smsLink;
+                    setTimeout(() => {
+                        feedback.textContent = 'If nothing opened, try the Copy option instead';
+                        feedback.className = 'feedback-text feedback-info';
+                    }, 2000);
+                } catch (error) {
+                    feedback.textContent = 'Auto-text failed - use Copy option instead';
+                    feedback.className = 'feedback-text feedback-info';
+                }
+            });
+        }
+        
+        function copyToClipboard() {
+            const textarea = document.createElement('textarea');
+            textarea.value = window.currentMessage;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const feedbacks = document.querySelectorAll('.copyFeedback');
+            feedbacks.forEach(feedback => {
+                feedback.textContent = 'Copied! Paste into your text app';
+                feedback.className = 'feedback-text feedback-success';
+                setTimeout(() => {
+                    feedback.textContent = '';
+                    feedback.className = 'feedback-text';
+                }, 4000);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const noteInputs = document.querySelectorAll('.note-input');
+            noteInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    updatePreview();
+                    updateProgressIndicator();
+                });
+            });
+            
+            document.getElementById('noteModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeNoteModal();
+                }
+            });
+            
+            document.getElementById('modalNoteText').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    saveNote();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
