@@ -1,2 +1,2 @@
 # Menus
-This iss wher eI will keep my menus for clients
+This is where I will keep my menus for clients
