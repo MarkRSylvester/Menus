@@ -608,6 +608,23 @@
                 padding: 15px 12px;
             }
             
+            /* Stack delivery days vertically on mobile */
+            table tr:not(.week-header) {
+                display: block;
+                border: none;
+                margin-bottom: 20px;
+            }
+            
+            table tr:not(.week-header) td {
+                display: block;
+                width: 100%;
+                border: 2px solid var(--sea-foam);
+                border-radius: 15px;
+                margin-bottom: 15px;
+                background: white;
+                box-shadow: 0 4px 16px rgba(74, 93, 107, 0.15);
+            }
+            
             .action-buttons {
                 flex-direction: column;
                 gap: 12px;
@@ -748,7 +765,7 @@
             
             <div class="button-separator"></div>
             
-            <button class="action-btn" onclick="clearAllNotes()">Clear</button>
+            <button class="action-btn" onclick="clearAllNotes()">Clear All Notes</button>
             <button class="action-btn" onclick="generateNotesLink()">Send Notes</button>
             <button class="action-btn" onclick="openGeneralNoteModal()">Add General Note</button>
         </div>
